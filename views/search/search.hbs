@@ -1,0 +1,19 @@
+<h2>Search</h2>
+<form action="/search" method="post">
+  <input type="text" name="searchQuery">
+  <button type="submit">Search</button>
+</form>
+
+{{#if searchResults}}
+  <ul>
+    {{#each searchResults}}
+      <li>
+        <h2>{{this.name}}</h2>
+        <p>{{this.description}}</p>
+        <p>Wiki ID: {{this.wikiId}}</p>
+        <p>Birth: {{this.birth}}</p>
+        <p>Death: {{this.death}}</p>
+      </li>
+    {{/each}}
+  </ul>
+{{/if}}
