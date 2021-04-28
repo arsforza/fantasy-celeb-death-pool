@@ -1,6 +1,5 @@
 require('dotenv').config();
 
-const bodyParser   = require('body-parser');
 const cookieParser = require('cookie-parser');
 const express      = require('express');
 const favicon      = require('serve-favicon');
@@ -43,6 +42,6 @@ app.locals.title = 'Fantasy Celebrity Death Pool';
 
 app.use('/', require('./routes/index.routes'));
 app.use('/search', require('./routes/search.routes'));
-
+app.use('/auth', require('./routes/auth.routes'));
 
 module.exports = app;

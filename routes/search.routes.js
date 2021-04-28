@@ -10,7 +10,10 @@ router.post('/', (req, res, next) => {
   const { searchQuery } = req.body;
 
   wikiApi.searchPerson(searchQuery)
-  .then(searchResults => res.render('search/search', { searchResults }))
+  .then(searchResults => {
+    console.log(searchResults);
+    res.render('search/search', { searchResults })
+  })
   .catch(error => console.log(error));
 });
 

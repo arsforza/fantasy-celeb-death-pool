@@ -8,11 +8,10 @@
   <ul>
     {{#each searchResults}}
       <li>
-        <h2>{{this.name}}</h2>
+        <a href="{{this.wikipediaUrl}}" target="_blank"><h2>{{this.name}}</h2></a>
         <p>{{this.description}}</p>
-        <p>Wiki ID: {{this.wikiId}}</p>
-        <p>Birth: {{this.birth}}</p>
-        <p>Death: {{this.death}}</p>
+        <p>Birth year: {{this.birth}}</p>
+        <form action="/add-person" method="post"><button type="submit">Add person to list</button></form>
       </li>
     {{/each}}
   </ul>
