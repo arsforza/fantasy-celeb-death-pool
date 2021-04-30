@@ -9,7 +9,7 @@ const personSchema = new Schema(
     birthYear: Number,
     deathYear: { type: Number, default: null },
     wikiPageUrl: String,
-    imageUrl: String,
+    imageUrl: { type: String, default: null },
     jsonUrl: String
   },
   {

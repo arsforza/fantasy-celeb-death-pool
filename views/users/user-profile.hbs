@@ -1,1 +1,16 @@
 <h2>Welcome, {{userInSession.username}}</h2>
+
+<h5>Your bet for this year</h5>
+{{#if thisYearBet}}
+  {{#each thisYearBet.people}}
+    <p>{{this.name}}</p>
+    <p>Birth year: {{this.birthYear}}</p>
+  {{/each}}
+  {{#unless fullList}}
+    <a class="btn btn-primary" href="/fill-list">Complete your bet</a>
+  {{/unless}}
+{{else}}
+  <form action="/create-bet" method="post">
+    <button class="btn btn-primary">Create new bet</a>
+  </form>
+{{/if}}

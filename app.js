@@ -9,6 +9,7 @@ const logger       = require('morgan');
 const path         = require('path');
 const passport = require('passport');
 const localStrategy = require('./configs/passport.config');
+const authCheck = require('./middleware/authcheck.middleware');
 
 require('./configs/db.config');
 
@@ -47,8 +48,7 @@ app.use(favicon(path.join(__dirname, 'public', 'images', 'favicon.ico')));
 app.locals.title = 'Fantasy Celebrity Death Pool';
 
 app.use('/', require('./routes/index.routes'));
-app.use('/search', require('./routes/search.routes'));
-app.use('/auth', require('./routes/auth.routes'));
-app.use('/users', require('./routes/users.routes'));
+app.use('/', require('./routes/auth.routes'));
+app.use('/', authCheck, require('./routes/users.routes'));
 
 module.exports = app;

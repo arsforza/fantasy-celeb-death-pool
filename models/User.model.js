@@ -3,12 +3,8 @@ const { Schema, model } = mongoose;
  
 const userSchema = new Schema(
   {
-    username: {
-      type: String,
-      unique: true,
-      trim: true
-    },
-    passwordHash: { type: String },
+    username: { type: String, unique: true, trim: true },
+    passwordHash: { type: String, trim: true },
     role: { type: String }
   },
   {

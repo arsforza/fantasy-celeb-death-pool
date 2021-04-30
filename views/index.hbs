@@ -1,11 +1,13 @@
 <h1>{{title}}</h1>
 <p>Welcome to {{title}}</p>
 {{#if userInSession}}
-  {{userInSession.username}}
-  <form action="auth/logout" method="POST">
+  <a href="/user-profile">
+    {{userInSession.username}}
+  </a>
+  <form action="/logout" method="POST">
     <button>Logout</button>
   </form>
 {{else}}
-<a href="auth/signup">Signup</a>
-<a href="./auth/login">Login</a>
+  <a href="/signup">Signup</a>
+  <a href="/login">Login</a>
 {{/if}}

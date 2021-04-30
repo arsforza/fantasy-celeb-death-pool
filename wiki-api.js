@@ -72,15 +72,15 @@ function getInfo(entity) {
   if(labels.en)
     name = labels.en.value;
 
-  let birth = null;
+  let birthYear = null;
   if(claims.P569)
-    birth = getYear(claims.P569[0].mainsnak.datavalue.value.time);
+    birthYear = getYear(claims.P569[0].mainsnak.datavalue.value.time);
   else
     return false;
   
-  let death = null;
+  let deathYear = null;
   if(claims.P570)
-    death = getYear(claims.P570[0].mainsnak.datavalue.value.time);
+    deathYear = getYear(claims.P570[0].mainsnak.datavalue.value.time);
 
   let description = '';
   if(descriptions.en)
@@ -92,7 +92,7 @@ function getInfo(entity) {
 
   const jsonUrl = `https://www.wikidata.org/wiki/Special:EntityData/${wikiId}.json`;
 
-  return { wikiId, name, description, birth, death, wikipediaUrl, jsonUrl };
+  return { wikiId, name, description, birthYear, deathYear, wikipediaUrl, jsonUrl };
 }
 
 function getYear(date) {

@@ -39,7 +39,8 @@ router.post('/signup', (req, res, next) => {
     })
   })
   .then(createdUser => {
-    res.redirect('/users/user-profile');
+
+    res.redirect('/user-profile');
   })
   .catch(err => next(err));
 });
@@ -47,8 +48,8 @@ router.post('/signup', (req, res, next) => {
 router.get('/login', (req, res, next) => res.render('auth/login'));
 
 router.post('/login', passport.authenticate('local',  {
-  successRedirect: '/users/user-profile',
-  failureRedirect: '/auth/login'
+  successRedirect: '/user-profile',
+  failureRedirect: '/login'
 }));
 
 router.post('/logout', (req, res) => {
