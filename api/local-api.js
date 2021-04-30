@@ -1,6 +1,5 @@
-const User = require('./models/User.model');
-const Person = require('./models/Person.model');
-const Bet = require('./models/Bet.model');
+const Person = require('../models/Person.model');
+const Bet = require('../models/Bet.model');
 
 const currentYear = new Date().getFullYear();
 
@@ -12,7 +11,7 @@ const getUserThisYearBet = (userId) => {
       model: 'Person'
     })
     .then(thisYearBet => {
-      resolve(thisYearBet);
+      thisYearBet ? resolve(thisYearBet) : resolve(false);
     })
     .catch(err => console.error(err))
   });
@@ -41,19 +40,19 @@ const getAllUserBets = (userId) => {
 
 const isPersonAlreadyInBet = (userId, wikiId) => {
   return new Promise((resolve, reject) => {
+    let inBet = false;
     getUserThisYearBet(userId)
     .then(bet => {
       if(bet.people) {
         bet.people.forEach(person => {
           if(person.wikiId === wikiId) {
-            return true;
+            inBet = true;
+            return;
           }
         });
       }
-      return false;
-    })
-    .then(isInBet => {
-      resolve(isInBet);
+
+      resolve(inBet);
     })
     .catch(err => console.error(err));
   });
@@ -69,7 +68,7 @@ const isPersonAlreadyInDb = (wikiId) => {
   });
 };
 
-const getPersonByWikiId = (wikiId)=> {
+const getPersonByWikiId = (wikiId) => {
   return new Promise((resolve, reject) => {
     Person.findOne({ wikiId: wikiId })
     .then(person =>{
@@ -121,6 +120,26 @@ const addPersonToBet = (userId, person) => {
   });
 }
 
+const getAllPeople = () => {
+  return new Promise((resolve, reject) => {
+    Person.find({})
+    .then(people => {
+      resolve(people)
+    })
+    .catch(err => console.error(err));
+  });
+}
+
+const getDeadPeople = (year) => {
+  return new Promise((resolve, reject) => {
+    People.find({ deathYear: year })
+    .then(people => {
+      resolve(people)
+    })
+    .catch(err => console.error(err));
+  });
+}
+
 module.exports = {
   getUserThisYearBet,
   isBetFull,
@@ -131,4 +150,6 @@ module.exports = {
   isPersonAlreadyInBet,
   addPersonToBet,
   getPersonByWikiId,
+  getAllPeople,
+  getDeadPeople,
 }

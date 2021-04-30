@@ -1,39 +1,52 @@
 <h2>Add people to your bet</h2>
 
-<form action="/search-name" method="post">
-  <input type="text" name="searchQuery">
-  <button type="submit">Search</button>
-</form>
+<div class="row">
+  <div class="col-4">
+    <form action="/search-name" method="post">
+      <input type="text" name="searchQuery">
+      <button type="submit">Search</button>
+    </form>
+    {{#if err}}
+      <p>{{err}}</p>
+    {{/if}}      
+    
+    <hr>
 
-{{#if searchResults}}
-  <ul id="search-results">
-    {{#each searchResults}}
-      <li>
-        <a href="{{this.wikipediaUrl}}" target="_blank">
-            <h2 >{{this.name}}</h2>
-          </a>
-          <p>{{this.description}}</p>
-          <p>Birth year: {{this.birthYear}}</p>
-        <form action="/add-person" method="post">
-          <div class="hidden">
-            <input readonly="readonly" type="text" name="wikiId" value="{{this.wikiId}}">
-            <input readonly="readonly" type="text" name="name" value="{{this.name}}">
-            <input readonly="readonly" type="text" name="description" value="{{this.description}}">
-            <input readonly="readonly" type="text" name="birthYear" value="{{this.birthYear}}">
-            <input readonly="readonly" type="text" name="deathYear" value="{{this.deathYear}}">
-            <input readonly="readonly" type="text" name="wikipediaUrl" value="{{this.wikipediaUrl}}">
-            <input readonly="readonly" type="text" name="jsonUrl" value="{{this.jsonUrl}}">
-          </div>
-          <button type="submit">Add person to list</button>
-        </form>
-      </li>
-    {{/each}}
-  </ul>
-{{/if}}
-
-<h2>Your bet list</h2>
-{{#each bet.people}}
-  <p>{{this.name}}</p>
-  <p>Birth year: {{this.birthYear}}</p>
-{{/each}}
-
+    {{#if searchResults}}
+      <ul id="search-results">
+        {{#each searchResults}}
+          <li>
+            <a href="{{this.wikipediaUrl}}" target="_blank">
+                <h2 >{{this.name}}</h2>
+            </a>
+            <p>{{this.description}}</p>
+            <p>Birth year: {{this.birthYear}}</p>
+            {{#if this.showButton}}
+              <form action="/add-person" method="post">
+                <div class="hidden">
+                  <input readonly="readonly" type="text" name="wikiId" value="{{this.wikiId}}">
+                  <input readonly="readonly" type="text" name="name" value="{{this.name}}">
+                  <input readonly="readonly" type="text" name="description" value="{{this.description}}">
+                  <input readonly="readonly" type="text" name="birthYear" value="{{this.birthYear}}">
+                  <input readonly="readonly" type="text" name="deathYear" value="{{this.deathYear}}">
+                  <input readonly="readonly" type="text" name="wikipediaUrl" value="{{this.wikipediaUrl}}">
+                  <input readonly="readonly" type="text" name="jsonUrl" value="{{this.jsonUrl}}">
+                </div>
+                <button type="submit">Add person to list</button>
+              </form>
+            {{/if}}
+          </li>
+        {{/each}}
+      </ul>
+    {{/if}}
+  </div>
+  <div class="col-8">
+    <div class="row">
+      <h2>Your bet list</h2>
+      {{#each bet.people}}
+        <p>{{this.name}}</p>
+        <p>Birth year: {{this.birthYear}}</p>
+      {{/each}}
+    </div>
+  </div>
+</div>

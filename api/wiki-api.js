@@ -1,4 +1,6 @@
 const axios = require('axios');
+const schedule = require('node-schedule');
+const localApi = require('./local-api');
 
 const searchPerson = (searchQuery) => {
   return new Promise((resolve, reject) => {
@@ -16,6 +18,36 @@ const searchPerson = (searchQuery) => {
     .catch(error => console.error(error));
   })
 }
+
+const checkDeath = (jsonUrl) => {
+  return new Promise((resolve, reject) => {
+    axios.get(jsonUrl)
+    .then(responseFromApi => {
+      const firstKey = Object.keys(responseFromApi.data.entities)[0];
+      const ent = responseFromApi.data.entities[`${firstKey}`];
+      resolve(!isAlive(ent));
+    })
+    .catch(error => console.error(error));
+  })
+  .catch(error => console.error(error));
+}
+
+const graveDigger = schedule.scheduleJob('30 11 0 * * *', () => {
+  console.log('--- GRAVEDIGGER ---');
+  localApi.getAllPeople()
+  .then(people => {
+    people.forEach(person => {
+      if(person.deathYear === null) {
+        checkDeath(person.jsonUrl)
+        .then(isDead => {
+          person.deathYear = isDead ? currentYear : null;
+        })
+        .catch(err => console.error(err));
+      }
+    });
+  })
+  .catch(err => console.error(err));
+});
 
 function filterResults(allSearchResults) {
     const apiCalls = [];
@@ -38,8 +70,6 @@ function filterResults(allSearchResults) {
     })
     .catch(error => console.error(error));    
 }
-
-
 
 function getPersonData(responseFromApi) {
   const firstKey = Object.keys(responseFromApi.data.entities)[0];
@@ -100,5 +130,6 @@ function getYear(date) {
 }
 
 module.exports = {
-  searchPerson
+  searchPerson,
+  checkDeath,
 };

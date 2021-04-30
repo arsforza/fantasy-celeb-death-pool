@@ -45,11 +45,16 @@ router.post('/signup', (req, res, next) => {
   .catch(err => next(err));
 });
 
-router.get('/login', (req, res, next) => res.render('auth/login'));
+router.get('/login', (req, res, next) => {
+  const { error } = req.flash();
+  const err = error ? error[0] : false;
+  res.render('auth/login', { err });
+});
 
 router.post('/login', passport.authenticate('local',  {
   successRedirect: '/user-profile',
-  failureRedirect: '/login'
+  failureRedirect: '/login',
+  failureFlash: true,
 }));
 
 router.post('/logout', (req, res) => {

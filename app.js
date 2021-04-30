@@ -9,6 +9,7 @@ const logger       = require('morgan');
 const path         = require('path');
 const passport = require('passport');
 const localStrategy = require('./configs/passport.config');
+const flash = require('connect-flash');
 const authCheck = require('./middleware/authcheck.middleware');
 
 require('./configs/db.config');
@@ -25,6 +26,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 require('./configs/session.config')(app);
 
+app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 require('./configs/serialize.config');
@@ -50,5 +52,7 @@ app.locals.title = 'Fantasy Celebrity Death Pool';
 app.use('/', require('./routes/index.routes'));
 app.use('/', require('./routes/auth.routes'));
 app.use('/', authCheck, require('./routes/users.routes'));
+
+console.log(Date());
 
 module.exports = app;
