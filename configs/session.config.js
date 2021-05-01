@@ -13,7 +13,7 @@ module.exports = app => {
         maxAge: 600000
       },
       store: MongoStore.create({
-        mongoUrl: process.env.MONGO_URI,
+        mongoUrl: process.env.MONGO_URI_ATLAS || process.env.MONGO_URI_LOCAL,
       })
     })
   )
