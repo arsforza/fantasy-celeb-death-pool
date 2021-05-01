@@ -35,12 +35,13 @@ router.post('/signup', (req, res, next) => {
     return User.create({
       username,
       passwordHash,
-      role: 'user'
     })
   })
   .then(createdUser => {
-
-    res.redirect('/user-profile');
+    req.login(createdUser, err => {
+      if(err) return next(err);
+      return res.redirect('/dashboard');
+    })
   })
   .catch(err => next(err));
 });
@@ -52,7 +53,7 @@ router.get('/login', (req, res, next) => {
 });
 
 router.post('/login', passport.authenticate('local',  {
-  successRedirect: '/user-profile',
+  successRedirect: '/dashboard',
   failureRedirect: '/login',
   failureFlash: true,
 }));

@@ -1,5 +1,7 @@
 const Person = require('../models/Person.model');
 const Bet = require('../models/Bet.model');
+const Death = require('../models/Death.model');
+const { updateMany } = require('../models/Person.model');
 
 const currentYear = new Date().getFullYear();
 
@@ -28,11 +30,19 @@ const isBetFull = (bet) => {
   });
 };
 
-const getAllUserBets = (userId) => {
+const getAllThisYearsBets = () => {
   return new Promise((resolve, reject) => {
-    Bet.find({ userId })
-    .then(allUserBets => {
-      resolve(allUserBets);
+    Bet.find({ year: currentYear })
+    .populate({
+      path: 'userId',
+      model: 'User'
+    })
+    .populate({
+      path: 'people',
+      model: 'Person'
+    })
+    .then(allBets => {
+      resolve(allBets);
     })
     .catch(err => console.error(err));
   });
@@ -80,22 +90,53 @@ const getPersonByWikiId = (wikiId) => {
 
 const createNewPerson = (person) => {
   return new Promise((resolve, reject) => {
-    const { wikiId, name, description, birthYear, deathYear, wikipediaUrl, jsonUrl } = person;
+    const { wikiId, name, description, birthYear, wikipediaUrl, jsonUrl } = person;
   
     Person.create({
       wikiId: wikiId,
       name: name,
       description: description,
       birthYear: birthYear,
-      deathYear: deathYear,
       wikipediaUrl: wikipediaUrl,
-      jsonUrl: jsonUrl
+      jsonUrl: jsonUrl,
+      basePoints: calculateBasePoints(birthYear),
     })
     .then(createdPerson => {
       resolve(createdPerson);
     })
     .catch(err => console.error(err));
   });
+}
+
+function calculateBasePoints(birthYear) {
+  const age = currentYear - birthYear;
+
+  let bonus = 1;
+  
+  switch(true) {
+    case (age < 10):
+      bonus = 5;
+      break;
+    case (age < 20):
+      bonus = 3;
+      break;
+    case (age < 30):
+      bonus = 2;
+      break;
+    case (age < 40):
+      bonus = 1.5;
+      break;
+    case (age < 50):
+      bonus = 1.2;
+      break;
+    case (age < 60):
+      bonus = 1.1;
+      break;
+    default:
+      bonus = 1;
+  }
+
+  return bonus * 1000 / age;
 }
 
 const createBet = (userId) => {
@@ -130,26 +171,111 @@ const getAllPeople = () => {
   });
 }
 
-const getDeadPeople = (year) => {
+// const getDeadPeople = (year) => {
+//   return new Promise((resolve, reject) => {
+//     People.find({ deathYear: year })
+//     .then(people => {
+//       resolve(people)
+//     })
+//     .catch(err => console.error(err));
+//   });
+// }
+
+const getPersonById = (personId) => {
   return new Promise((resolve, reject) => {
-    People.find({ deathYear: year })
-    .then(people => {
-      resolve(people)
+    Person.findById(personId)
+    .then(person => resolve(person))
+    .catch(err => console.error(err));
+  });
+}
+
+const updatePoints = (person) => {
+  Bet.updateMany({ year: currentYear, people: person._id}, { $inc: { points: person.basePoints } })
+  .then()
+  .catch(err => console.error(err));
+
+
+
+  // getAllThisYearsBets()
+  // .then(bets => {
+  //   bets.forEach(bet => {
+  //     console.log('bet :', bet);
+  //     if(bet.people.some(betPerson => betPerson._id === person._id)) {
+  //       const newPoints = bet.points + person.basePoints;
+  //       console.log('newPoints :', newPoints);
+  //       Bet.findOneAndUpdate({_id: bet._id}, { points: newPoints })
+  //       .then()
+  //       .catch(err => console.error(err));
+  //     }
+  //   });
+  // })
+  // .catch(err => console.error(err));
+}
+
+const newDeath = (personId) => {
+  return new Promise((resolve, reject) => {
+    getPersonById(personId)
+    .then(person => {
+      console.log('before update');
+      updatePoints(person);
+      console.log('after update');
+      Death.create({ person: person._id, year: currentYear })
+      .then(death => resolve(death))
+      .catch(err => console.error(err));
     })
     .catch(err => console.error(err));
   });
 }
 
+const getThisYearDeaths = () => {
+  return new Promise((resolve, reject) => {
+    Death.find({ year: currentYear })
+    .populate({
+      path: 'person',
+      model: 'Person'
+    })
+    .then(deathList => resolve(deathList))
+    .catch(err => console.error(err));
+  });
+}
+
+const howManyBets = (personId) => {
+  return new Promise((resolve, reject) => {
+    Bet.find({ year: currentYear })
+    .then(bets => {
+      return bets.reduce((sum, bet) => {
+        if(bet.people.includes(personId))
+          sum++;
+      },  0)
+    })
+    .then(repeatedBets => resolve(repeatedBets))
+    .catch(err => console.error(err));
+  });
+}
+
+const didPersoDie = (personId) => {
+  return new Promise((resolve, reject) => {
+    Death.findOne({person: personId})
+    .then(foundDeath => {
+      foundDeath ? resolve(true) : resolve(false);
+    })
+    .catch(err => console.error(err));
+  })
+}
+
 module.exports = {
+  getThisYearDeaths,
   getUserThisYearBet,
-  isBetFull,
-  getAllUserBets,
-  isPersonAlreadyInDb,
-  createNewPerson,
-  createBet,
-  isPersonAlreadyInBet,
-  addPersonToBet,
   getPersonByWikiId,
   getAllPeople,
-  getDeadPeople,
+  getAllThisYearsBets,
+  createNewPerson,
+  createBet,
+  isBetFull,
+  isPersonAlreadyInDb,
+  isPersonAlreadyInBet,
+  didPersoDie,
+  addPersonToBet,
+  newDeath,
+  howManyBets,
 }

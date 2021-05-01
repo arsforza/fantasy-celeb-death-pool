@@ -32,7 +32,7 @@ const checkDeath = (jsonUrl) => {
   .catch(error => console.error(error));
 }
 
-const graveDigger = schedule.scheduleJob('30 11 0 * * *', () => {
+const graveDigger = schedule.scheduleJob('0 7 0 * * *', () => {
   console.log('--- GRAVEDIGGER ---');
   localApi.getAllPeople()
   .then(people => {
@@ -40,9 +40,12 @@ const graveDigger = schedule.scheduleJob('30 11 0 * * *', () => {
       if(person.deathYear === null) {
         checkDeath(person.jsonUrl)
         .then(isDead => {
-          person.deathYear = isDead ? currentYear : null;
-        })
-        .catch(err => console.error(err));
+          if(isDead) {
+            localApi.newDeath(person.id)
+            .then(death => console.log(death))
+            .catch(err => console.error(err));
+          }
+        }).catch(err => console.error(err));
       }
     });
   })
@@ -108,10 +111,6 @@ function getInfo(entity) {
   else
     return false;
   
-  let deathYear = null;
-  if(claims.P570)
-    deathYear = getYear(claims.P570[0].mainsnak.datavalue.value.time);
-
   let description = '';
   if(descriptions.en)
     description = descriptions.en.value;
@@ -122,7 +121,7 @@ function getInfo(entity) {
 
   const jsonUrl = `https://www.wikidata.org/wiki/Special:EntityData/${wikiId}.json`;
 
-  return { wikiId, name, description, birthYear, deathYear, wikipediaUrl, jsonUrl };
+  return { wikiId, name, description, birthYear, wikipediaUrl, jsonUrl };
 }
 
 function getYear(date) {

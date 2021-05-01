@@ -5,7 +5,8 @@ const betSchema = new Schema(
   {
     userId: { type: Schema.Types.ObjectId, model: 'User' },
     year: { type: Number },
-    people: [{ type: Schema.Types.ObjectId, model: 'Person' }]
+    people: [{ type: Schema.Types.ObjectId, model: 'Person' }],
+    points: { type: Number, default: 0 },
   },
   {
     timestamps: true

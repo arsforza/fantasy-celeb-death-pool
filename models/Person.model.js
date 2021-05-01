@@ -7,10 +7,10 @@ const personSchema = new Schema(
     name: String,
     description: String,
     birthYear: Number,
-    deathYear: { type: Number, default: null },
     wikiPageUrl: String,
     imageUrl: { type: String, default: null },
-    jsonUrl: String
+    jsonUrl: String,
+    basePoints: { type: Number, default: 0 },
   },
   {
     timestamps: true

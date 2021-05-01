@@ -1,13 +1,2 @@
 <h1>{{title}}</h1>
 <p>Welcome to {{title}}</p>
-{{#if userInSession}}
-  <a href="/user-profile">
-    {{userInSession.username}}
-  </a>
-  <form action="/logout" method="POST">
-    <button>Logout</button>
-  </form>
-{{else}}
-  <a href="/signup">Signup</a>
-  <a href="/login">Login</a>
-{{/if}}

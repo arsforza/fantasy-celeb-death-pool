@@ -10,7 +10,9 @@ const path         = require('path');
 const passport = require('passport');
 const localStrategy = require('./configs/passport.config');
 const flash = require('connect-flash');
-const authCheck = require('./middleware/authcheck.middleware');
+// const authCheck = require('./middleware/authcheck.middleware');
+const isUserLoggedIn = require('./middleware/authcheck.middleware').isUserLoggedIn;
+const isUserAdmin = require('./middleware/authcheck.middleware').isUserAdmin;
 
 require('./configs/db.config');
 
@@ -40,9 +42,9 @@ app.use(require('node-sass-middleware')({
   sourceMap: true
 }));
       
-
-app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
+app.set('views', path.join(__dirname, 'views'));
+hbs.registerPartials(__dirname + "/views/partials");
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(favicon(path.join(__dirname, 'public', 'images', 'favicon.ico')));
 
@@ -51,7 +53,8 @@ app.locals.title = 'Fantasy Celebrity Death Pool';
 
 app.use('/', require('./routes/index.routes'));
 app.use('/', require('./routes/auth.routes'));
-app.use('/', authCheck, require('./routes/users.routes'));
+app.use('/', isUserLoggedIn, require('./routes/users.routes'));
+app.use('/', isUserAdmin, require('./routes/admin.routes'));
 
 console.log(Date());
 

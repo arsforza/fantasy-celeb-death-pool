@@ -1,0 +1,12 @@
+simulatedeath
+
+{{#each people}}
+  <h2>{{this.name}}</h2>  
+  <p>{{this.birthYear}}</p>
+  <form action="/simulate-death" method="post">
+    <div class="hidden">
+      <input readonly="readonly" type="text" name="personId" value="{{this._id}}">
+    </div>
+    <button type="submit">Simulate death</button>
+  </form>
+{{/each}}

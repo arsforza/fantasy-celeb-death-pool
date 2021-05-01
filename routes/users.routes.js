@@ -3,8 +3,22 @@ const router  = express.Router();
 const wikiApi = require('../api/wiki-api');
 const localApi = require('../api/local-api');
 
+router.get('/dashboard', (req, res, next) => {
+  const { user } = req;
+  const isAdmin = user.role === 'admin';
+  Promise.all([localApi.getThisYearDeaths(), localApi.getAllThisYearsBets()])
+  .then(results => {
+    const deathList = results[0];
+    const betList = results[1];
+
+    res.render('dashboard', { userInSession: user, deathList, betList, isAdmin })
+  })
+  .catch(err => next(err));
+});
+
 router.get('/user-profile', (req, res, next) => {
   const { user } = req;
+  const isAdmin = user.role === 'admin';
   const { error } = req.flash();
   const err = error ? error[0] : false;
   console.log(err);
@@ -12,7 +26,7 @@ router.get('/user-profile', (req, res, next) => {
   .then(thisYearBet => {
     localApi.isBetFull(thisYearBet)
     .then(fullList => {
-      res.render('users/user-profile', { userInSession: user, thisYearBet, fullList, err })
+      res.render('users/user-profile', { userInSession: user, thisYearBet, fullList, err, isAdmin })
     })
     .catch(err => next(err));
   })
@@ -21,6 +35,7 @@ router.get('/user-profile', (req, res, next) => {
 
 router.get('/fill-list', (req, res, next) => {
   const { user } = req;
+  const isAdmin = user.role === 'admin';
   const { searchResults } = req.session;
 
 
@@ -36,7 +51,7 @@ router.get('/fill-list', (req, res, next) => {
 
   localApi.getUserThisYearBet(user._id)
   .then(bet => {
-    res.render('users/fill-list', { searchResults, bet })
+    res.render('users/fill-list', { userInSession: user, searchResults, bet, isAdmin })
   })
 });
 
@@ -69,14 +84,14 @@ router.post('/create-bet', (req, res, next) => {
 
 router.post('/add-person', (req, res, next) => {
   const { user } = req;
-  const { wikiId, name, description, birthYear, deathYear, wikipediaUrl, jsonUrl } = req.body;
+  const { wikiId, name, description, birthYear, wikipediaUrl, jsonUrl, basePoints } = req.body;
 
   localApi.isPersonAlreadyInDb(wikiId)
   .then(alreadyInDb => {
     if(alreadyInDb)
       return localApi.getPersonByWikiId(wikiId)
     else {
-      return localApi.createNewPerson({ wikiId, name, description, birthYear, deathYear, wikipediaUrl, jsonUrl })
+      return localApi.createNewPerson({ wikiId, name, description, birthYear, wikipediaUrl, jsonUrl, basePoints })
     }
   }).then(chosenPerson => {
     if(chosenPerson) {
