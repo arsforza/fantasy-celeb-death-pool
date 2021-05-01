@@ -39,7 +39,7 @@ router.get('/fill-list', (req, res, next) => {
   const { searchResults } = req.session;
 
 
-  req.session.searchResults = '';
+  req.session.searchResults = [];
   if(searchResults) {
     searchResults.forEach(result => {
       localApi.isPersonAlreadyInBet(user._id, result.wikiId)
