@@ -1,19 +1,18 @@
 <div class="phil fullpage container-fluid d-flex flex-column justify-content-center">
   <div class="container text-center">
-    <h1>{{title}}</h1>
-    <p>Become a bad person</p>
+    <h1 class="display-1 mb-5">{{title}}</h1>
     <a href="#explanation" class="btn btn-outline-light">How does it work?</a>
   </div>
 </div>
 
 <div id="explanation" class="fullpage container-fluid d-flex flex-column justify-content-start">
   <div class="container d-flex flex-column justify-content-center pt-5 text-center">
-    <h3>Basic rules</h3>
-    <ul class="list-group">
+    <h2 class="display-6">Basic rules</h2>
+    <ul class="list-group lead">
       <li class="list-group-item border-0">Pick a list of 15 famous people (people with an English Wikipedia Page) that are currently alive.</li>
       <li class="list-group-item border-0">If they die during the year you score points.</li>
     </ul>
-    <div>
+    <div class="lead">
       The points are calculated like this:<br>
       Every famous person gets a starting value of 1000, which gets divided by their age.<br>
       The resulting base value is then multiplied by a coefficient based on age brackets:<br>
@@ -29,6 +28,14 @@
       <tr><td><strong>10s:</strong></td><td>3x</td></tr>
       <tr><td><strong>9 or below:</strong></td><td>5x</td></tr>    
     </table>
+  </div>
+  <div class="container d-flex flex-column justify-content-center mt-5">
+    <div class="align-self-center">
+      <button class="btn btn-dark btn-lg">Signup</button>
+    </div>
+    <div class="align-self-center mt-5">
+      <button class="btn btn-outline-dark btn-lg">Login</button>
+    </div>
   </div>  
 </div>
 

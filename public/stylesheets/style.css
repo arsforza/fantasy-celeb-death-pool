@@ -24,7 +24,7 @@ a {
   z-index: -1; }
 
 .phil {
-  background: url("../images/philip.gif") rgba(0, 0, 0, 0.85);
+  background: url("../images/philip.gif") rgba(0, 0, 0, 0.65);
   background-blend-mode: multiply;
   background-position: center;
   background-repeat: no-repeat;
