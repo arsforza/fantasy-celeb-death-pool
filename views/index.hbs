@@ -1,2 +1,28 @@
 <h1>{{title}}</h1>
-<p>Welcome to {{title}}</p>
+
+<div>
+  <div>
+    Welcome to {{title}}, the game that makes you feel like a bad person.<br>
+    Here are some basic rules:<br>
+    <ul>
+      <li>You will pick a list of 15 famous people (people with an English Wikipedia Page) that are currently alive.</li>
+      <li>If they die during the year you score points.</li>
+    </ul>
+  </div>
+  <div>
+    The points are calculated like this:<br>
+    Every famous person gets a starting value of 1000, which gets divided by their age.<br>
+    The resulting base value, is then multiplied by a coefficient based on these age brackets:<br>
+    <table>
+      <tr><td><strong>People aged 60 or above:</strong></td><td>1x</td></tr>
+      <tr><td><strong>People in their 50s:</strong></td><td>1.1x</td></tr>
+      <tr><td><strong>People in their 40s:</strong></td><td>1.2x</td></tr>
+      <tr><td><strong>People in their 30s:</strong></td><td>1.5x</td></tr>
+      <tr><td><strong>People in their 20s:</strong></td><td>2x</td></tr>
+      <tr><td><strong>People in their 10s:</strong></td><td>3x</td></tr>
+      <tr><td><strong>People aged 9 or below:</strong></td><td>5x</td></tr>    
+    </table>
+  </div>  
+</div>
+
+

@@ -37,21 +37,24 @@ router.get('/fill-list', (req, res, next) => {
   const { user } = req;
   const isAdmin = user.role === 'admin';
   const { searchResults } = req.session;
-
-
   req.session.searchResults = [];
+
   if(searchResults) {
     searchResults.forEach(result => {
       localApi.isPersonAlreadyInBet(user._id, result.wikiId)
       .then(isInBet => {
-        result.showButton = !isInBet;
+        result.showButton = isInBet ? false : true;
       })
+      .catch(err => next(err));
     })
   }
 
   localApi.getUserThisYearBet(user._id)
   .then(bet => {
-    res.render('users/fill-list', { userInSession: user, searchResults, bet, isAdmin })
+    localApi.isBetFull(bet)
+    .then(fullBet => {
+      res.render('users/fill-list', { userInSession: user, searchResults, bet, fullBet, isAdmin })
+    })
   })
 });
 
