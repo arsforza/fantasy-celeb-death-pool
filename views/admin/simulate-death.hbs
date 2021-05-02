@@ -1,12 +1,19 @@
-simulatedeath
-
-{{#each people}}
-  <h2>{{this.name}}</h2>  
-  <p>{{this.birthYear}}</p>
-  <form action="/simulate-death" method="post">
-    <div class="hidden">
-      <input readonly="readonly" type="text" name="personId" value="{{this._id}}">
-    </div>
-    <button type="submit">Simulate death</button>
-  </form>
-{{/each}}
+<div class="container navbar-margin">
+  <div class="row">
+  {{#each people}}
+      <div class="dont-overlap card m-2" style="width: 18rem;">
+        <div class="card-body">
+          <h5 class="card-title">{{this.name}}</h5>
+          <h6 class="card-subtitle mb-2 text-muted">Birth year: {{this.birthYear}}</h6>
+          <p class="card-text">{{this.description}}</p>
+          <form class="align-self-end" action="/simulate-death" method="post">
+            <div class="hidden">
+              <input readonly="readonly" type="text" name="personId" value="{{this._id}}">
+            </div>
+            <button class="btn btn-primary" type="submit">Simulate death</button>
+          </form>
+        </div>
+      </div>
+    {{/each}}
+  </div>
+</div>

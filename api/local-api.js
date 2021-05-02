@@ -171,16 +171,6 @@ const getAllPeople = () => {
   });
 }
 
-// const getDeadPeople = (year) => {
-//   return new Promise((resolve, reject) => {
-//     People.find({ deathYear: year })
-//     .then(people => {
-//       resolve(people)
-//     })
-//     .catch(err => console.error(err));
-//   });
-// }
-
 const getPersonById = (personId) => {
   return new Promise((resolve, reject) => {
     Person.findById(personId)
@@ -193,32 +183,13 @@ const updatePoints = (person) => {
   Bet.updateMany({ year: currentYear, people: person._id}, { $inc: { points: person.basePoints } })
   .then()
   .catch(err => console.error(err));
-
-
-
-  // getAllThisYearsBets()
-  // .then(bets => {
-  //   bets.forEach(bet => {
-  //     console.log('bet :', bet);
-  //     if(bet.people.some(betPerson => betPerson._id === person._id)) {
-  //       const newPoints = bet.points + person.basePoints;
-  //       console.log('newPoints :', newPoints);
-  //       Bet.findOneAndUpdate({_id: bet._id}, { points: newPoints })
-  //       .then()
-  //       .catch(err => console.error(err));
-  //     }
-  //   });
-  // })
-  // .catch(err => console.error(err));
 }
 
 const newDeath = (personId) => {
   return new Promise((resolve, reject) => {
     getPersonById(personId)
     .then(person => {
-      console.log('before update');
       updatePoints(person);
-      console.log('after update');
       Death.create({ person: person._id, year: currentYear })
       .then(death => resolve(death))
       .catch(err => console.error(err));
@@ -239,6 +210,16 @@ const getThisYearDeaths = () => {
   });
 }
 
+const getAllDeaths = () => {
+  return new Promise((resolve, reject) => {
+    Death.find({})
+    .then(deathList => {
+      deathList ? resolve(deathList) : resolve([]);
+    })
+    .catch(err => console.error(err));
+  })
+}
+
 const howManyBets = (personId) => {
   return new Promise((resolve, reject) => {
     Bet.find({ year: currentYear })
@@ -253,7 +234,7 @@ const howManyBets = (personId) => {
   });
 }
 
-const didPersoDie = (personId) => {
+const didPersonDie = (personId) => {
   return new Promise((resolve, reject) => {
     Death.findOne({person: personId})
     .then(foundDeath => {
@@ -263,18 +244,44 @@ const didPersoDie = (personId) => {
   })
 }
 
+const getAlivePeople = () => {
+  return new Promise((resolve, reject) => {
+    getAllPeople()
+    .then(allPeople => {
+      const allPromises = [];
+      allPeople.forEach(person => {
+        allPromises.push(didPersonDie(person._id));
+      });
+
+      const alivePeople = [];
+      Promise.all(allPromises)
+      .then(promises => {
+        for(let i = 0; i < promises.length; i++) {
+          if(!promises[i])
+            alivePeople.push(allPeople[i]);
+        }
+
+        return alivePeople;
+      })
+      .then(allAlivePeople => resolve(allAlivePeople))
+      .catch(err => console.error(err));
+    })
+    .catch(err => console.error(err));
+  });
+}
+
 module.exports = {
   getThisYearDeaths,
   getUserThisYearBet,
   getPersonByWikiId,
   getAllPeople,
   getAllThisYearsBets,
+  getAlivePeople,
   createNewPerson,
   createBet,
   isBetFull,
   isPersonAlreadyInDb,
   isPersonAlreadyInBet,
-  didPersoDie,
   addPersonToBet,
   newDeath,
   howManyBets,

@@ -1,11 +1,14 @@
-<h1>Signup</h1>
-<form action="/signup" method="post">
-  <label for="username">Username</label>
-  <input type="text" name="username" id="">
-  <label for="password">Password</label>
-  <input type="password" name="password" id="">
-  <button type="submit">Register</button>
-</form>
-{{#if message}}
-  <p>{{message}}</p>
-{{/if}}
+<div class="phil fullpage container-fluid d-flex flex-column justify-content-top">
+  <div class="container mt-5" style="width: 18rem;">
+    <form action="/signup" method="post">
+        <label for="username">username</label>
+        <input class="form-control bg-transparent text-white" type="text" name="username">
+        <label for="password">password</label>
+        <input class="form-control bg-transparent text-white" type="password" name="password">
+        <button class="btn btn-outline-light mt-4" type="submit">Register</button>
+    </form>
+    {{#if err}}
+      <p>{{err}}</p>
+    {{/if}}
+  </div>
+</div>

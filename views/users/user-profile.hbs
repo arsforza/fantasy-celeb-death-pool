@@ -1,16 +1,30 @@
-<h2>Welcome, {{userInSession.username}}</h2>
+<div class="container navbar-margin">
+  <h2>Welcome, {{userInSession.username}}</h2>
 
-<h5>Your bet for this year</h5>
-{{#if thisYearBet}}
-  {{#each thisYearBet.people}}
-    <p>{{this.name}}</p>
-    <p>Birth year: {{this.birthYear}}</p>
-  {{/each}}
-  {{#unless fullList}}
-    <a class="btn btn-primary" href="/fill-list">Complete your bet</a>
-  {{/unless}}
-{{else}}
-  <form action="/create-bet" method="post">
-    <button class="btn btn-primary">Create new bet</a>
-  </form>
-{{/if}}
+  <h5>Your bet for this year</h5>
+  {{#if thisYearBet}}
+    <div class="row">
+      {{#each thisYearBet.people}}
+        <div class="dont-overlap card m-2" style="width: 18rem;">
+          <div class="card-body">
+            <h5 class="card-title">{{this.name}}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">Birth year: {{this.birthYear}}</h6>
+            <p class="card-text">{{this.description}}</p>          
+          </div>
+        </div>
+      {{/each}}
+      {{#unless fullList}}
+      <div>
+        <a class="btn btn-primary" href="/fill-list">
+          Complete your bet
+        </a>
+      </div>
+      {{/unless}}
+    </div>
+  {{else}}
+    <form action="/create-bet" method="post">
+      <button class="btn btn-primary">Create new bet</a>
+    </form>
+  {{/if}}
+</div>
+
