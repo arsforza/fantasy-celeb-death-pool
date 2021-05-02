@@ -2,11 +2,11 @@
   <div>
   {{#if userInSession}}
     <div class="nav-item">
-      <a class="nav-link btn btn-link" href="/dashboard">Home</a>
+      <a class="nav-link btn btn-link mx-2" href="/dashboard">Home</a>
     </div>
   {{else}}
     <div class="nav-item">
-      <a class="nav-link btn btn-link" href="/">Home</a>
+      <a class="nav-link btn btn-link mx-2" href="/">Home</a>
     </div>
   {{/if}}
   </div>
@@ -14,27 +14,27 @@
     {{#if userInSession}}
       {{#if isAdmin }}
         <div class="nav-item">
-          <a class="nav-link btn btn-link" href="/simulate-death">
+          <a class="nav-link btn btn-link mx-2" href="/simulate-death">
             Simulate death
           </a>
         </div>
       {{/if}}
       <div class="nav-item">
-        <a class="nav-link btn btn-link" href="/user-profile">
+        <a class="nav-link btn btn-link mx-2" href="/user-profile">
           Your bet
         </a>
       </div>
       <div class="nav-item">
         <form action="/logout" method="POST">
-          <button class="nav-link btn btn-danger" >Logout</button>
+          <button class="nav-link btn btn-danger mx-2" >Logout</button>
         </form>    
       </div>
     {{else}}
       <div class="nav-item">
-        <a class="nav-link btn btn-link" href="/signup">Signup</a>
+        <a class="nav-link btn btn-link mx-2" href="/signup">Signup</a>
       </div>
       <div class="nav-item">
-        <a class="nav-link btn btn-link" href="/login">Login</a>
+        <a class="nav-link btn btn-link mx-2" href="/login">Login</a>
       </div>
     {{/if}}
   </div>

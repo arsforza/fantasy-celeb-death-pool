@@ -50,21 +50,31 @@ const getAllThisYearsBets = () => {
 
 const isPersonAlreadyInBet = (userId, wikiId) => {
   return new Promise((resolve, reject) => {
-    let inBet = false;
-    getUserThisYearBet(userId)
-    .then(bet => {
-      if(bet.people) {
-        bet.people.forEach(person => {
-          if(person.wikiId === wikiId) {
-            inBet = true;
-            return;
-          }
-        });
-      }
-
-      resolve(inBet);
+    Person.findOne({ wikiId: wikiId })
+    .then(person => {
+      if(person) {
+        Bet.findOne({ userId: userId, year: currentYear, people: person._id })
+        .then(bet => {
+          if(bet.people.includes(person._id))
+            resolve(true)
+          else
+            resolve(false);
+        })
+        .catch(err => console.error(err));
+      }else
+        resolve(false);
     })
-    .catch(err => console.error(err));
+    .catch(err => console.error(err))
+    
+    // .then(bet => {
+    //   if(bet.people) {
+    //     const inBet = bet.people.some(person => person.wikiId === wikiId);
+    //     resolve(inBet);
+    //   } else {
+    //     resolve(false);
+    //   }
+    // })
+    // .catch(err => console.error(err));
   });
 }
 

@@ -1,6 +1,6 @@
 <div class="container-fluid navbar-margin">
 <div class="row">
-  <div class="col-4">
+  <div class="col-12 col-lg-4">
     <h2>Add people to your bet</h2>
     {{#unless fullBet}}
       <form action="/search-name" method="post">
@@ -13,26 +13,24 @@
     {{#if searchResults}}
       <div>
         {{#each searchResults}}
-          <div class="dont-overlap card m-2" style="width: 18rem;">
+          <div class="card m-2" style="width: 18rem;">
             <div class="card-body">
               <a href="{{this.wikipediaUrl}}" target="_blank">
                   <h5 class="card-title">{{this.name}}</h5>
               </a>
               <h6 class="card-subtitle mb-2 text-muted">Birth year: {{this.birthYear}}</h6>
-              <p class="card-text">{{this.description}}</p>          
-              {{#if this.showButton}}
-                <form action="/add-person" method="post">
-                  <div class="hidden">
-                    <input readonly="readonly" type="text" name="wikiId" value="{{this.wikiId}}">
-                    <input readonly="readonly" type="text" name="name" value="{{this.name}}">
-                    <input readonly="readonly" type="text" name="description" value="{{this.description}}">
-                    <input readonly="readonly" type="text" name="birthYear" value="{{this.birthYear}}">
-                    <input readonly="readonly" type="text" name="wikipediaUrl" value="{{this.wikipediaUrl}}">
-                    <input readonly="readonly" type="text" name="jsonUrl" value="{{this.jsonUrl}}">
-                  </div>
-                  <button class="btn btn-primary" type="submit">Add person to list</button>
-                </form>
-              {{/if}}
+              <p class="card-text">{{this.description}}</p>
+              <form action="/add-person" method="post">
+                <div class="hidden">
+                  <input readonly="readonly" type="text" name="wikiId" value="{{this.wikiId}}">
+                  <input readonly="readonly" type="text" name="name" value="{{this.name}}">
+                  <input readonly="readonly" type="text" name="description" value="{{this.description}}">
+                  <input readonly="readonly" type="text" name="birthYear" value="{{this.birthYear}}">
+                  <input readonly="readonly" type="text" name="wikipediaUrl" value="{{this.wikipediaUrl}}">
+                  <input readonly="readonly" type="text" name="jsonUrl" value="{{this.jsonUrl}}">
+                </div>
+                <button class="btn btn-primary" type="submit">Add person</button>
+              </form>
             </div>
           </div>
         {{/each}}
@@ -40,7 +38,7 @@
     {{/if}}
   {{/unless}}
   </div>
-  <div class="col-8">
+  <div class="col-12 col-lg-8">
     <div class="row">
       <h2>Your bet</h2>
       {{#each bet.people}}

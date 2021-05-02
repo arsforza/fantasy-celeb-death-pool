@@ -21,7 +21,7 @@ router.get('/user-profile', (req, res, next) => {
   const isAdmin = user.role === 'admin';
   const { error } = req.flash();
   const err = error ? error[0] : false;
-  console.log(err);
+  console.error(err);
   localApi.getUserThisYearBet(user._id)
   .then(thisYearBet => {
     localApi.isBetFull(thisYearBet)
@@ -37,17 +37,8 @@ router.get('/fill-list', (req, res, next) => {
   const { user } = req;
   const isAdmin = user.role === 'admin';
   const { searchResults } = req.session;
-  req.session.searchResults = [];
 
-  if(searchResults) {
-    searchResults.forEach(result => {
-      localApi.isPersonAlreadyInBet(user._id, result.wikiId)
-      .then(isInBet => {
-        result.showButton = isInBet ? false : true;
-      })
-      .catch(err => next(err));
-    })
-  }
+  req.session.searchResults = [];
 
   localApi.getUserThisYearBet(user._id)
   .then(bet => {
@@ -56,18 +47,19 @@ router.get('/fill-list', (req, res, next) => {
       res.render('users/fill-list', { userInSession: user, searchResults, bet, fullBet, isAdmin })
     })
   })
+  .catch(err => next(err));
 });
 
 router.post('/search-name', (req, res, next) => {
+  const { user } = req;
   const { searchQuery } = req.body;
 
   if(searchQuery.trim().length === 0) {
     res.redirect('/fill-list');
     return;
   }
-    
-
-  wikiApi.searchPerson(searchQuery)
+  
+  wikiApi.searchPerson(searchQuery, user)
   .then(searchResults => {
     req.session.searchResults = searchResults;
     res.redirect('/fill-list');

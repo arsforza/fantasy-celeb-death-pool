@@ -2,14 +2,14 @@ const axios = require('axios');
 const schedule = require('node-schedule');
 const localApi = require('./local-api');
 
-const searchPerson = (searchQuery) => {
+const searchPerson = (searchQuery, user) => {
   return new Promise((resolve, reject) => {
     axios.get(`https://www.wikidata.org/w/api.php?action=wbsearchentities&search=${searchQuery}&language=en&format=json`)
     .then(responseFromApi => {
       return responseFromApi.data.search;
     })
     .then( allSearchResults => {
-      filterResults(allSearchResults)
+      filterResults(allSearchResults, user)
       .then(filteredResults => {
         resolve(filteredResults);
       })
@@ -52,7 +52,7 @@ const graveDigger = schedule.scheduleJob('0 7 0 * * *', () => {
   .catch(err => console.error(err));
 });
 
-function filterResults(allSearchResults) {
+function filterResults(allSearchResults, user) {
     const apiCalls = [];
     allSearchResults.forEach(currentResult => {
       const { id } = currentResult;
@@ -64,8 +64,8 @@ function filterResults(allSearchResults) {
       const filteredArray = [];
 
       responses.forEach(singleResponse => {
-        if(getPersonData(singleResponse)) {
-          filteredArray.push(getPersonData(singleResponse));
+        if(getPersonData(singleResponse, user)) {
+          filteredArray.push(getPersonData(singleResponse, user));
         }
       })
 
@@ -74,11 +74,11 @@ function filterResults(allSearchResults) {
     .catch(error => console.error(error));    
 }
 
-function getPersonData(responseFromApi) {
+function getPersonData(responseFromApi, user) {
   const firstKey = Object.keys(responseFromApi.data.entities)[0];
   const ent = responseFromApi.data.entities[`${firstKey}`];
   if(isEligible(ent))
-    return getInfo(ent);
+    return getInfo(ent, user);
   else 
     return false;
 }
@@ -99,7 +99,7 @@ function hasEnglishWikiPage(ent) {
   return ent.sitelinks.enwiki ? true : false;
 }
 
-function getInfo(entity) {
+function getInfo(entity, user) {
   const { id: wikiId, labels, descriptions, claims, sitelinks } = entity;
   let name = '';
   if(labels.en)

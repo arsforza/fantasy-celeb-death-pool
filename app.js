@@ -4,13 +4,11 @@ const cookieParser = require('cookie-parser');
 const express      = require('express');
 const favicon      = require('serve-favicon');
 const hbs          = require('hbs');
-// const mongoose     = require('mongoose');
 const logger       = require('morgan');
 const path         = require('path');
 const passport = require('passport');
 const localStrategy = require('./configs/passport.config');
 const flash = require('connect-flash');
-// const authCheck = require('./middleware/authcheck.middleware');
 const isUserLoggedIn = require('./middleware/authcheck.middleware').isUserLoggedIn;
 const isUserAdmin = require('./middleware/authcheck.middleware').isUserAdmin;
 
