@@ -1,25 +1,27 @@
 <div class="container navbar-margin">
-  <h2>Welcome, {{userInSession.username}}</h2>
-
-  <h5>Your bet for this year</h5>
+  <div class="mt-4">
+    <h2>Welcome, {{userInSession.username}}</h2>
+  </div>
   {{#if thisYearBet}}
-    <div class="row">
-      {{#each thisYearBet.people}}
-        <div class="dont-overlap card m-2" style="width: 18rem;">
-          <div class="card-body">
-            <h5 class="card-title">{{this.name}}</h5>
-            <h6 class="card-subtitle mb-2 text-muted">Birth year: {{this.birthYear}}</h6>
-            <p class="card-text">{{this.description}}</p>          
-          </div>
-        </div>
-      {{/each}}
       {{#unless fullList}}
-        <div>
+        <div class="my-4">
           <a class="btn btn-primary" href="/fill-list">
             Complete your bet
           </a>
         </div>
       {{/unless}}
+    <div class="row">
+      
+        {{#each thisYearBet.people}}
+          <div class="dont-overlap card m-2" style="width: 18rem;">
+            <div class="card-body">
+              <h5 class="card-title">{{this.name}}</h5>
+              <h6 class="card-subtitle mb-2 text-muted">Birth year: {{this.birthYear}}</h6>
+              <p class="card-text">{{this.description}}</p>          
+            </div>
+          </div>
+        {{/each}}
+      
     </div>
   {{else}}
     <form action="/create-bet" method="post">

@@ -3,9 +3,9 @@
     <form action="/signup" method="post">
         <label for="username">username</label>
         <input class="form-control bg-transparent text-white" type="text" name="username">
-        <label for="password">password</label>
+        <label class="mt-4" for="password">password</label>
         <input class="form-control bg-transparent text-white" type="password" name="password">
-        <button class="btn btn-outline-light mt-4" type="submit">Register</button>
+        <button class="btn btn-outline-light btn-lg mt-4" type="submit">Register</button>
     </form>
     {{#if err}}
       <p>{{err}}</p>
