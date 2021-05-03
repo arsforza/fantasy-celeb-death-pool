@@ -1,13 +1,13 @@
 # Fantasy Celebrity Death Pool
-Fantasy Celebrity Death Pool is a betting game where you bet on the death of celebrities.
+Fantasy Celebrity Death Pool is a betting game where you bet on the death of celebrities.\
 [Play the game!](https://fantasy-celeb-death-pool.herokuapp.com/)
 
 ### How does the game work?
 * Pick a list of 15 famous people (people with an English Wikipedia Page) that are currently alive.
 * If they die during the year you score points.
 
-The points are calculated like this:
-Every famous person gets a starting value of 1000, which gets divided by their age.
+The points are calculated like this:\
+Every famous person gets a starting value of 1000, which gets divided by their age.\
 The resulting base value is then multiplied by a coefficient based on age brackets:
 
 Age bracket | Coefficient
