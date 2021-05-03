@@ -7,8 +7,8 @@
         <input class="form-control bg-transparent text-white" type="password" name="password">
         <button class="btn btn-outline-light btn-lg mt-4" type="submit">Register</button>
     </form>
-    {{#if err}}
-      <p>{{err}}</p>
+    {{#if errorMessage}}
+      <div class="alert alert-warning mt-4">{{errorMessage}}</div>>
     {{/if}}
   </div>
 </div>
