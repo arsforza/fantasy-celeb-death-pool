@@ -42,6 +42,7 @@ router.get('/fill-list', (req, res, next) => {
 
   localApi.getUserThisYearBet(user._id)
   .then(bet => {
+    
     localApi.isBetFull(bet)
     .then(fullBet => {
       res.render('users/fill-list', { userInSession: user, searchResults, bet, fullBet, isAdmin })
@@ -101,5 +102,16 @@ router.post('/add-person', (req, res, next) => {
   })
   .catch(err => next(err));
 });
+
+router.post('/delete-person', (req, res, next) => {
+  const { betId, personId} = req.body;
+
+  localApi.deletePersonFromBet(betId, personId)
+  .then(updatedBet => {
+    res.redirect('/fill-list');
+  })
+  .catch(err => next(err));
+})
+
 
 module.exports = router;

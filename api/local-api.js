@@ -280,6 +280,16 @@ const getAlivePeople = () => {
   });
 }
 
+const deletePersonFromBet = (betId, personId) => {
+  return new Promise((resolve, reject) => {
+    Bet.findByIdAndUpdate(betId, {$pull: {people: personId}})
+    .then(updatedBet => {
+      resolve();
+    })
+  })
+  .catch(err => console.error(err));
+}
+
 module.exports = {
   getThisYearDeaths,
   getUserThisYearBet,
@@ -295,4 +305,5 @@ module.exports = {
   addPersonToBet,
   newDeath,
   howManyBets,
+  deletePersonFromBet,
 }

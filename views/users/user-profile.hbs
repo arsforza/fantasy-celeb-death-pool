@@ -3,13 +3,15 @@
     <h2>Welcome, {{userInSession.username}}</h2>
   </div>
   {{#if thisYearBet}}
-      {{#unless fullList}}
-        <div class="my-4">
-          <a class="btn btn-primary" href="/fill-list">
-            Complete your bet
-          </a>
-        </div>
-      {{/unless}}
+    <div class="my-4">
+      <a class="btn btn-primary" href="/fill-list">
+      {{#if fullList}}
+        Change your bet
+      {{else}}
+        Complete your bet
+      {{/if}}
+      </a>
+    </div>
     <div class="row">
       
         {{#each thisYearBet.people}}
